@@ -1,5 +1,4 @@
 from django.urls import path, include
-from .views import FoodListView
 from . import views
 from rest_framework.routers import DefaultRouter
 from .views import DepartmentViewSet, UserViewSet, ProjectViewSet, ProjectCommentViewSet, ShotViewSet, ShotAssociationViewSet, CommentViewSet
@@ -16,7 +15,6 @@ router.register(r'shots', CommentViewSet)
 
 urlpatterns = [
     path("",views.index, name="index"),
-    path('food-items/', FoodListView.as_view()),
     path('', include(router.urls)),
     path('create-department/', create_department_view, name='create_department'),
     path('create-user/', create_user_view, name='create_user'),

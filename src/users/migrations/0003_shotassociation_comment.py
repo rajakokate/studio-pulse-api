@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('polls', '0002_client_department_project_user_projectcomment_shot'),
+        ('users', '0002_client_department_project_user_projectcomment_shot'),
     ]
 
     operations = [
@@ -19,9 +19,9 @@ class Migration(migrations.Migration):
                 ('assignedFrom', models.TextField(blank=True, null=True)),
                 ('assignedDate', models.TextField(blank=True, null=True)),
                 ('dueDate', models.TextField(blank=True, null=True)),
-                ('dept', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='polls.department')),
-                ('shot', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='polls.shot')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='polls.user')),
+                ('dept', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.department')),
+                ('shot', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.shot')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.user')),
             ],
             options={
                 'unique_together': {('version', 'shot', 'user', 'dept')},
@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
                 ('commentId', models.AutoField(primary_key=True, serialize=False)),
                 ('version', models.FloatField()),
                 ('comment', models.TextField()),
-                ('shot_association', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='polls.shotassociation')),
+                ('shot_association', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.shotassociation')),
             ],
         ),
     ]

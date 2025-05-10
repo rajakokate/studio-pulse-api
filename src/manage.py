@@ -5,7 +5,7 @@ import os
 import sys
 
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'studiopulse-api.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'studiopulse_api.settings')
     try:
         from django.core.management import execute_from_command_line
         import django
@@ -15,9 +15,6 @@ def main():
         from django.core.management import call_command
         call_command('migrate', interactive=False)
 
-        # Load seed data
-        # from polls.seed import load_sample_data
-        # load_sample_data()
 
     except ImportError as exc:
         raise ImportError(

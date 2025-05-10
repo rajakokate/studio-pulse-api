@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import viewsets
-from .models import FoodItem, Department, User, Project, ProjectComment, Shot, ShotAssociation, Comment
+from .models import Department, User, Project, ProjectComment, Shot, ShotAssociation, Comment
 from .serializers import (
     DepartmentSerializer,
     UserSerializer,
@@ -14,15 +14,11 @@ from .serializers import (
     ShotAssociationSerializer,
     CommentSerializer
 )
-
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 def index(request):
     return HttpResponse("Hello world. You're at the poll index.")
 
-class FoodListView(APIView):
-    def get(self, request):
-        data = list(FoodItem.objects.values())
-        return HttpResponse(data)
     
 class DepartmentViewSet(viewsets.ModelViewSet):
     queryset = Department.objects.all()
@@ -54,13 +50,14 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 from django.shortcuts import render
 
+@csrf_exempt
 def create_department_view(request):
     if request.method == "POST":
-        name = request.POST.get('name')
-        description = request.POST.get('description')
+        deptId = request.POST.get('deptId')
+        deptName = request.POST.get('deptName')
         
         # Save to DB
-        Department.objects.create(name=name, description=description)
+        Department.objects.create(deptId=deptId, deptName=deptName)
 
         return render(request, 'create_department.html', {'success': True})
 
@@ -77,6 +74,7 @@ def create_user_view(request):
         
         # Save to DB
         Department.objects.create(userName=userName, userId=userId, contact=contact, dept=dept,email=email)
+        
 
         return render(request, 'create_user.html', {'success': True})
 

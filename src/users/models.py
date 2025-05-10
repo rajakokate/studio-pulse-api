@@ -1,8 +1,5 @@
 from django.db import models
 
-class FoodItem(models.Model):
-    name = models.CharField(max_length=100)
-    quantity = models.IntegerField()
 
 # ------------------ Department ------------------
 class Department(models.Model):
@@ -111,7 +108,6 @@ class Comment(models.Model):
     commentId = models.AutoField(primary_key=True)
     version = models.FloatField()
     shot_association = models.ForeignKey(ShotAssociation, on_delete=models.CASCADE)
-    comment = models.TextField()
     comment = models.TextField()
 
 #     class Meta:

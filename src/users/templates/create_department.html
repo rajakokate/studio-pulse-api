@@ -30,7 +30,7 @@
           const description = document.getElementById("description").value;
 
           try {
-            const response = await fetch("http://localhost:8000/departments/", {
+            const response = await fetch("http://127.0.0.1:8000/studio-pulse/departments/", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

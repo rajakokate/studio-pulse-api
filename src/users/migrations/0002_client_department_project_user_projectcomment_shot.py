@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('polls', '0001_initial'),
+        # ('studiopulse_api', '0001_initial'),
     ]
 
     operations = [
@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
                 ('Status', models.CharField(choices=[('TODO', 'TODO'), ('In Progress', 'In Progress'), ('IN REVIEW', 'IN REVIEW'), ('APPROVED', 'APPROVED'), ('REJECTED', 'REJECTED')], max_length=20)),
                 ('DueDate', models.DateTimeField(blank=True, null=True)),
                 ('StartDate', models.DateTimeField(blank=True, null=True)),
-                ('ClientID', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='polls.client')),
+                ('ClientID', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='users.client')),
             ],
         ),
         migrations.CreateModel(
@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
                 ('contact', models.TextField(blank=True, null=True)),
                 ('email', models.EmailField(max_length=254)),
                 ('role', models.TextField()),
-                ('dept', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='polls.department')),
+                ('dept', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='users.department')),
             ],
         ),
         migrations.CreateModel(
@@ -52,8 +52,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('commentId', models.AutoField(primary_key=True, serialize=False)),
                 ('comment', models.TextField()),
-                ('project', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='polls.project')),
-                ('user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='polls.user')),
+                ('project', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.project')),
+                ('user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='users.user')),
             ],
         ),
         migrations.CreateModel(
@@ -65,7 +65,7 @@ class Migration(migrations.Migration):
                 ('reel', models.TextField(blank=True, null=True)),
                 ('filepath', models.TextField(blank=True, null=True)),
                 ('scene', models.TextField(blank=True, null=True)),
-                ('ProjectId', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='polls.project')),
+                ('ProjectId', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.project')),
             ],
             options={
                 'unique_together': {('shotId', 'ProjectId')},
