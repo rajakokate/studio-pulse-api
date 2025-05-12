@@ -114,7 +114,7 @@ python manage.py migrate
 
 After activating the virtual environment and completing migrations, you can start the development server
 
-python 
+python manage.py runserver 
 
 
 
