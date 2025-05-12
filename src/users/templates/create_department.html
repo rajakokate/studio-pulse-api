@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create Department</title>
+  </head>
+  <body>
+    <h2>Create Department</h2>
+    <form id="departmentForm">
+      <label for="name">Department Name:</label><br />
+      <input type="text" id="name" name="name" required /><br /><br />
+      <label for="id">Department Id:</label><br />
+      <input type="text" id="id" name="id" required /><br /><br />
+
+      <label for="description">Description:</label><br />
+      <textarea id="description" name="description"></textarea><br /><br />
+
+      <button type="submit">Create Department</button>
+    </form>
+
+    <p id="result"></p>
+
+    <script>
+      document
+        .getElementById("departmentForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const name = document.getElementById("name").value;
+          const id = document.getElementById("id").value;
+          const description = document.getElementById("description").value;
+
+          try {
+            const response = await fetch("http://127.0.0.1:8000/studio-pulse/departments/", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                deptId: id,
+                deptName: name,
+                description: description,
+              }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              document.getElementById("result").textContent =
+                "Department created successfully!";
+            } else {
+              document.getElementById("result").textContent =
+                "Error: " + JSON.stringify(result);
+            }
+          } catch (error) {
+            document.getElementById("result").textContent =
+              "Fetch error: " + error;
+          }
+        });
+    </script>
+  </body>
+</html>
