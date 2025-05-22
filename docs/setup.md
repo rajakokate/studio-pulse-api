@@ -76,7 +76,7 @@ This is a Django app within the project that manages user-related functionality.
 -**`.gitignore`**: Specifies intentionally untracked files and directories that Git should ignore
 -**`manage.py`**: A command-line utility for managing the Django project (e.g., running server, migrations).
 -**`manage_backup.py`**: A backup version of `manage.py`
--**`tm.sh`**: A shell script, used for startin the project `$pyrun`
+-**`tm.sh`**: A shell script, used for starting the project `$pyrun`
 
 
 ###  setup instructions
@@ -92,7 +92,7 @@ venv\Scripts\activate   `on windows`
 
 # Install Dependencies
 
-pip install -r requirement.txt
+pip install -r requirements.txt
 
 ## Configure Environment variables
 
@@ -105,16 +105,18 @@ ALLOWED_HOSTS=127.0.0.1,localhost
 Note: Keep your .env file private and never push it to version control.
 
 ## Migrate the database
-
+cd src
 python manage.py makemigrations
 python manage.py migrate
 
-
 ## run the development  server
-
 After activating the virtual environment and completing migrations, you can start the development server
 
 python manage.py runserver 
+
+
+## to include all the libraries in requirements.txt (Optional)
+#pip freeze > ../requirements.txt
 
 
 

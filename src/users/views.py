@@ -4,7 +4,14 @@ from django.http import HttpResponseRedirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import viewsets
-from .models import Department, User, Project, ProjectComment, Shot, ShotAssociation, Comment
+#from streamlit import status
+from django.contrib.auth import login, logout
+from django.contrib.auth.hashers import check_password
+from rest_framework import status, permissions
+from django.middleware.csrf import get_token
+from .models import Department, Project, ProjectComment, Shot, ShotAssociation, Comment, User
+# from django.contrib.auth import get_user_model
+# User = get_user_model()
 from .serializers import (
     DepartmentSerializer,
     UserSerializer,
@@ -12,7 +19,10 @@ from .serializers import (
     ProjectCommentSerializer,
     ShotSerializer,
     ShotAssociationSerializer,
-    CommentSerializer
+    CommentSerializer,
+    GroupSerializer,
+    PermissionSerializer,
+    UserRegisterSerializer,
 )
 from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
@@ -48,6 +58,13 @@ class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
+class UserRegisterView(APIView):
+    def post(self, request):
+        serializer = UserRegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "User registered successfully."}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 from django.shortcuts import render
 
 @csrf_exempt
@@ -79,3 +96,75 @@ def create_user_view(request):
         return render(request, 'create_user.html', {'success': True})
 
     return render(request, 'create_user.html')
+
+# ------------------ Login ------------------
+class SessionLoginView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        userId = request.data.get("userId")
+        password = request.data.get("password")
+
+        try:
+            user = User.objects.get(userId=userId)
+            if user.check_password(password):
+                login(request, user)  # Sets the session
+                response = Response({"message": "Login successful"}, status=status.HTTP_200_OK)
+                response.set_cookie("csrftoken", get_token(request))  # Optional: expose CSRF token
+                return response
+        except User.DoesNotExist:
+            pass
+
+        return Response({"detail": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# ------------------ Get Current Logged-In User ------------------
+class CurrentUserView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
+
+from django.contrib.auth import authenticate
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.viewsets import ModelViewSet
+from django.contrib.auth.models import Group, Permission
+from rest_framework.permissions import IsAuthenticated
+
+
+class GroupViewSet(ModelViewSet):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    permission_classes = [IsAuthenticated]  # Restrict access as needed
+
+# Permission ViewSet
+class PermissionViewSet(ModelViewSet):
+    queryset = Permission.objects.all()
+    serializer_class = PermissionSerializer
+    permission_classes = [IsAuthenticated]  # Restrict access as needed
+
+
+class LoginView(APIView):
+    def post(self, request):
+        username = request.data.get("email")
+        password = request.data.get("password")
+        user = authenticate(email=username, password=password)
+
+        if user is not None:
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            }, status=HTTP_200_OK)
+        return Response({"error": "Invalid credentials"}, status=HTTP_400_BAD_REQUEST)
+# ------------------ Logout ------------------
+class LogoutView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        logout(request)
+        return Response({"message": "Logged out successfully"}, status=status.HTTP_200_OK)

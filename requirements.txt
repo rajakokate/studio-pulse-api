@@ -1,9 +1,12 @@
 altair==5.5.0
+argon2-cffi==23.1.0
+argon2-cffi-bindings==21.2.0
 asgiref==3.8.1
 attrs==25.3.0
 blinker==1.9.0
 cachetools==5.5.2
 certifi==2025.4.26
+cffi==1.17.1
 charset-normalizer==3.4.2
 click==8.1.8
 colorama==0.4.6
@@ -31,6 +34,7 @@ pillow==11.2.1
 protobuf==6.30.2
 psycopg2-binary==2.9.10
 pyarrow==20.0.0
+pycparser==2.22
 pydeck==0.9.1
 pygtrie==2.5.0
 python-dateutil==2.9.0.post0
