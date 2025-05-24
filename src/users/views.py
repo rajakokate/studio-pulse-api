@@ -150,12 +150,16 @@ class PermissionViewSet(ModelViewSet):
 
 class LoginView(APIView):
     def post(self, request):
-        username = request.data.get("email")
+        email = request.data.get("email")
+        username = request.data.get("username")
         password = request.data.get("password")
-        user = authenticate(email=username, password=password)
+        user = User.objects.filter(email=email).first()
+        if email is None:
+            user = User.objects.filter(username=username).first()
 
-        if user is not None:
+        if user is not None and user.check_password(password):
             refresh = RefreshToken.for_user(user)
+            refresh["email"] = user.email
             return Response({
                 "refresh": str(refresh),
                 "access": str(refresh.access_token),

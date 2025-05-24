@@ -79,6 +79,8 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    "USER_ID_FIELD": "email",
+    "USER_ID_CLAIM": "email",
 }
 
 MIDDLEWARE = [
@@ -108,7 +110,10 @@ TEMPLATES = [
         },
     },
 ]
-
+AUTH_USER_MODEL = "users.User"
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 WSGI_APPLICATION = 'studiopulse_api.wsgi.application'
 

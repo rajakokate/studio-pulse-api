@@ -30,8 +30,8 @@ class User(AbstractUser):
         "auth.Permission",
         related_name="custom_user_permissions"
     )
-
-    #USERNAME_FIELD = 'userId'
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["contact", "username"]
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
 
