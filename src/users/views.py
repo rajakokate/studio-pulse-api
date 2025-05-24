@@ -31,30 +31,37 @@ def index(request):
 
     
 class DepartmentViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 class ProjectViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
 class ProjectCommentViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
     queryset = ProjectComment.objects.all()
     serializer_class = ProjectCommentSerializer
 
 class ShotViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Shot.objects.all()
     serializer_class = ShotSerializer
 
 class ShotAssociationViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
     queryset = ShotAssociation.objects.all()
     serializer_class = ShotAssociationSerializer
 
 class CommentViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
