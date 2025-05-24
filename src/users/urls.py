@@ -3,7 +3,7 @@ from . import views
 from rest_framework.routers import DefaultRouter
 from .views import DepartmentViewSet, UserViewSet, ProjectViewSet, ProjectCommentViewSet, ShotViewSet, ShotAssociationViewSet, CommentViewSet
 from .views import create_department_view, create_user_view, UserRegisterView
-from .views import CurrentUserView, LogoutView, LoginView
+from .views import CurrentUserView, LogoutView, LoginView, SessionLoginView
 from .views import GroupViewSet, PermissionViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
@@ -28,7 +28,7 @@ urlpatterns = [
     path('register/', UserRegisterView.as_view(), name='user-register'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
-
+    path('signin/', SessionLoginView.as_view(), name='signin'),
     path('me/', CurrentUserView.as_view()),  # fetch current user info
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

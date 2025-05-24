@@ -60,13 +60,15 @@ INSTALLED_APPS = [
 
 REST_FRAMEWORK = {
     ## temporary disabling the below to use sessionAuthentication
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication'
-        #'rest_framework.authentication.TokenAuthentication',
-    ],
     # 'DEFAULT_AUTHENTICATION_CLASSES': [
-    #     'rest_framework.authentication.SessionAuthentication',
+    #     'rest_framework_simplejwt.authentication.JWTAuthentication'
+    #     #'rest_framework.authentication.TokenAuthentication',
     # ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
+
+    ],
 
 
     'DEFAULT_PERMISSION_CLASSES': [

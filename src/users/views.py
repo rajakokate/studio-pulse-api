@@ -102,11 +102,11 @@ class SessionLoginView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
-        userId = request.data.get("userId")
+        email = request.data.get("email")
         password = request.data.get("password")
 
         try:
-            user = User.objects.get(userId=userId)
+            user = User.objects.get(email=email)
             if user.check_password(password):
                 login(request, user)  # Sets the session
                 response = Response({"message": "Login successful"}, status=status.HTTP_200_OK)
