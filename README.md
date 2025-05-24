@@ -3,17 +3,18 @@ StudioPulse is an offline desktop application for media project tracking and fil
 
 
 # Add permission
-1) Create superuser for application
+1) Create superuser for application 
+    Run the python create_superuser.py script
     python manage.py createsuperuser
     - Enter the details:  (we can enter anything)
       - Username: studio-pulse
       - email - studio.pulse@gmail.com
       - password: Welcome
-2) start the server - python manage.py runserver (Assume all the migrations are already done)
+ -> start the server - python manage.py runserver (Assume all the migrations are already done)
 2) Get the token -  Using postman
   POST: http://127.0.0.1:8000/studio-pulse/login/
     {
-        "username": "studio-pulse",
+        "email": "studiopulse@gmail.com",
         "password": "Welcome123456"
     }
 3) Add the permission 
@@ -34,7 +35,8 @@ StudioPulse is an offline desktop application for media project tracking and fil
     - POST on localhost:8000/studio-pulse/api/groups/
     - body
      {
-       "name": "Admin"
+       "name": "Admin",
+        "permissions": [1]
     }
    
 6) now user can register using the below
@@ -51,5 +53,5 @@ StudioPulse is an offline desktop application for media project tracking and fil
     "groups": [1],
     "user_permissions": [1]
   }
-7) login
+7) login using email and password
     
