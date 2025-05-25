@@ -39,7 +39,7 @@ class Migration(migrations.Migration):
                 ('Status', models.CharField(choices=[('TODO', 'TODO'), ('In Progress', 'In Progress'), ('IN REVIEW', 'IN REVIEW'), ('APPROVED', 'APPROVED'), ('REJECTED', 'REJECTED')], max_length=20)),
                 ('DueDate', models.DateTimeField(blank=True, null=True)),
                 ('StartDate', models.DateTimeField(blank=True, null=True)),
-                ('ClientID', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='users.client')),
+                ('ClientID', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='user_management.client')),
             ],
         ),
         migrations.CreateModel(
@@ -51,7 +51,7 @@ class Migration(migrations.Migration):
                 ('reel', models.TextField(blank=True, null=True)),
                 ('filepath', models.TextField(blank=True, null=True)),
                 ('scene', models.TextField(blank=True, null=True)),
-                ('ProjectId', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.project')),
+                ('ProjectId', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='user_management.project')),
             ],
             options={
                 'unique_together': {('shotId', 'ProjectId')},
@@ -65,8 +65,8 @@ class Migration(migrations.Migration):
                 ('assignedFrom', models.TextField(blank=True, null=True)),
                 ('assignedDate', models.TextField(blank=True, null=True)),
                 ('dueDate', models.TextField(blank=True, null=True)),
-                ('dept', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.department')),
-                ('shot', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.shot')),
+                ('dept', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='user_management.department')),
+                ('shot', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='user_management.shot')),
             ],
         ),
         migrations.CreateModel(
@@ -75,7 +75,7 @@ class Migration(migrations.Migration):
                 ('commentId', models.AutoField(primary_key=True, serialize=False)),
                 ('version', models.FloatField()),
                 ('comment', models.TextField()),
-                ('shot_association', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.shotassociation')),
+                ('shot_association', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='user_management.shotassociation')),
             ],
         ),
         migrations.CreateModel(
@@ -93,13 +93,13 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(max_length=100, primary_key=True, serialize=False)),
                 ('role', models.TextField()),
                 ('password', models.CharField(max_length=128)),
-                ('dept', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='users.department')),
+                ('dept', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='user_management.department')),
                 ('groups', models.ManyToManyField(related_name='custom_user_groups', to='auth.group')),
                 ('user_permissions', models.ManyToManyField(related_name='custom_user_permissions', to='auth.permission')),
             ],
             options={
                 'verbose_name': 'user',
-                'verbose_name_plural': 'users',
+                'verbose_name_plural': 'user_management',
                 'abstract': False,
             },
             managers=[
@@ -109,15 +109,15 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='shotassociation',
             name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.user'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='user_management.user'),
         ),
         migrations.CreateModel(
             name='ProjectComment',
             fields=[
                 ('commentId', models.AutoField(primary_key=True, serialize=False)),
                 ('comment', models.TextField()),
-                ('project', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.project')),
-                ('user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='users.user')),
+                ('project', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='user_management.project')),
+                ('user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='user_management.user')),
             ],
         ),
         migrations.AlterUniqueTogether(

@@ -21,7 +21,7 @@ def create_superuser():
 
 def get_all_users():
     users = User.objects.all().values_list("email", flat=True)
-    print("All registered users:")
+    print("All registered user_management:")
     for user_email in users:
         print(user_email)
 

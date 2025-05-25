@@ -9,11 +9,11 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-# AUTH_USER_MODEL = 'users.User'
+# AUTH_USER_MODEL = 'user_management.User'
 from decouple import config
 from datetime import timedelta
 
-from apps import users
+from apps import user_management
 
 CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:8000',
@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     'rest_framework',
    # 'rest_framework.authtoken',
     'corsheaders',
-    "apps.users",
+    "apps.user_management",
 ]
 
 REST_FRAMEWORK = {
@@ -103,7 +103,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         # 'DIRS': [],
-        'DIRS': [BASE_DIR / 'users' / 'templates'],
+        'DIRS': [BASE_DIR / 'user_management' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -114,7 +114,7 @@ TEMPLATES = [
         },
     },
 ]
-AUTH_USER_MODEL = "users.User"
+AUTH_USER_MODEL = "user_management.User"
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
