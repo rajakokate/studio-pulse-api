@@ -5,7 +5,7 @@ import os
 import sys
 
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'studiopulse_api.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'apps.config.settings')
     try:
         from django.core.management import execute_from_command_line
         import django
