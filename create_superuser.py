@@ -2,7 +2,7 @@ import os
 import django
 
 # Set up Django environment
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "studiopulse_api.settings")  # Replace with your project's settings module
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "apps.config.settings")  # Replace with your project's settings module
 django.setup()
 
 from django.contrib.auth import get_user_model
