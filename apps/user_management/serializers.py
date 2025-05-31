@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Department, Project, ProjectComment, Shot, ShotAssociation, Comment, User
+from .models import Department, User
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.hashers import make_password
 # from django.contrib.auth import get_user_model
@@ -35,32 +35,6 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user.set_password(raw_password)  # Uses make_password internally
         user.save()
         return user
-
-class ProjectSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Project
-        fields = '__all__'
-
-class ProjectCommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProjectComment
-        fields = '__all__'
-
-class ShotSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Shot
-        fields = '__all__'
-
-class ShotAssociationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ShotAssociation
-        fields = '__all__'
-
-class CommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Comment
-        fields = '__all__'
-
 
 from rest_framework.serializers import ModelSerializer
 from django.contrib.auth.models import Group, Permission

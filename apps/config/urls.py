@@ -19,5 +19,6 @@ from django.urls import include, path
 
 urlpatterns = [
     path('studio-pulse/', include('apps.user_management.urls')),
-    path('admin/', admin.site.urls), 
+    path('studio-pulse/', include('apps.task_management.urls')),
+   # path('admin/', admin.site.urls),
 ]

@@ -9,17 +9,12 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.hashers import check_password
 from rest_framework import status, permissions
 from django.middleware.csrf import get_token
-from .models import Department, Project, ProjectComment, Shot, ShotAssociation, Comment, User
+from .models import Department, User
 # from django.contrib.auth import get_user_model
 # User = get_user_model()
 from .serializers import (
     DepartmentSerializer,
     UserSerializer,
-    ProjectSerializer,
-    ProjectCommentSerializer,
-    ShotSerializer,
-    ShotAssociationSerializer,
-    CommentSerializer,
     GroupSerializer,
     PermissionSerializer,
     UserRegisterSerializer,
@@ -39,31 +34,6 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
-class ProjectViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = Project.objects.all()
-    serializer_class = ProjectSerializer
-
-class ProjectCommentViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = ProjectComment.objects.all()
-    serializer_class = ProjectCommentSerializer
-
-class ShotViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = Shot.objects.all()
-    serializer_class = ShotSerializer
-
-class ShotAssociationViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = ShotAssociation.objects.all()
-    serializer_class = ShotAssociationSerializer
-
-class CommentViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
 
 class UserRegisterView(APIView):
     def post(self, request):

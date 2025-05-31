@@ -1,7 +1,7 @@
 from django.urls import path, include
 from . import views
 from rest_framework.routers import DefaultRouter
-from .views import DepartmentViewSet, UserViewSet, ProjectViewSet, ProjectCommentViewSet, ShotViewSet, ShotAssociationViewSet, CommentViewSet
+from .views import DepartmentViewSet, UserViewSet
 from .views import create_department_view, create_user_view, UserRegisterView
 from .views import CurrentUserView, LogoutView, LoginView, SessionLoginView
 from .views import GroupViewSet, PermissionViewSet
@@ -11,11 +11,6 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 router = DefaultRouter()
 router.register(r'departments', DepartmentViewSet)
 router.register(r'user_management', UserViewSet)
-router.register(r'projects', ProjectViewSet)
-router.register(r'comments', ProjectCommentViewSet)
-router.register(r'shots', ShotViewSet)
-router.register(r'shotAssign', ShotAssociationViewSet)
-router.register(r'shots', CommentViewSet)
 userRoutes = DefaultRouter()
 userRoutes.register(r'groups', GroupViewSet)
 userRoutes.register(r'permissions', PermissionViewSet)
@@ -33,6 +28,4 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/', include(userRoutes.urls)),  # Include the DRF router
-
-
 ]
