@@ -1,16 +1,9 @@
 from rest_framework import serializers
-from .models import Department, User, Project, ProjectComment, Shot, ShotAssociation, Comment
-
-class DepartmentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Department
-        fields = '__all__'
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = '__all__'
-
+from .models import  Project, ProjectComment, Shot, ShotAssociation, Comment
+from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.hashers import make_password
+# from django.contrib.auth import get_user_model
+# User = get_user_model()
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project

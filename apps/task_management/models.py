@@ -1,27 +1,6 @@
 from django.db import models
-
-
-# ------------------ Department ------------------
-class Department(models.Model):
-    deptId = models.CharField(primary_key=True, max_length=100)
-    deptName = models.TextField()
-
-    def __str__(self):
-        return self.deptName
-
-
-# ------------------ User ------------------
-class User(models.Model):
-    userId = models.CharField(primary_key=True, max_length=100)
-    userName = models.TextField()
-    contact = models.TextField(blank=True, null=True)
-    email = models.EmailField()
-    role = models.TextField()
-    dept = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
-
-
-    def __str__(self):
-        return self.userName
+from apps.user_management.models import  Department
+from django.conf import settings
 
 # ------------------ Client (Assumed based on FK) ------------------
 class Client(models.Model):
@@ -58,7 +37,7 @@ class ProjectComment(models.Model):
     commentId = models.AutoField(primary_key=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     comment = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return f"Comment {self.commentId} on {self.project}"
@@ -93,7 +72,7 @@ class ShotAssociation(models.Model):
     id = models.AutoField(primary_key=True)  # Add this line
     version = models.FloatField(default=1.0)
     shot = models.ForeignKey(Shot, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     dept = models.ForeignKey(Department, on_delete=models.CASCADE)
     assignedFrom = models.TextField(null=True, blank=True)
     assignedDate = models.TextField(null=True, blank=True)
