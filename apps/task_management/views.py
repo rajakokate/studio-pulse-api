@@ -1,17 +1,8 @@
-from django.shortcuts import render
 from django.http import HttpResponse
-from django.http import HttpResponseRedirect
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import viewsets
-#from streamlit import status
-from django.contrib.auth import login, logout
-from django.contrib.auth.hashers import check_password
-from rest_framework import status, permissions
-from django.middleware.csrf import get_token
+from rest_framework import  permissions
 from .models import Project, ProjectComment, Shot, ShotAssociation, Comment
-# from django.contrib.auth import get_user_model
-# User = get_user_model()
+
 from .serializers import (
     ProjectSerializer,
     ProjectCommentSerializer,

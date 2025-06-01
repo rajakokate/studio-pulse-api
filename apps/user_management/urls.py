@@ -1,7 +1,7 @@
 from django.urls import path, include
 from . import views
 from rest_framework.routers import DefaultRouter
-from .views import DepartmentViewSet, UserViewSet
+from .views import DepartmentViewSet,UserViewSet,  health_check
 from .views import create_department_view, create_user_view, UserRegisterView
 from .views import CurrentUserView, LogoutView, LoginView, SessionLoginView
 from .views import GroupViewSet, PermissionViewSet
@@ -28,4 +28,5 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/', include(userRoutes.urls)),  # Include the DRF router
+    path("health-check/", health_check, name="health-check"),
 ]
