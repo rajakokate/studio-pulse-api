@@ -36,6 +36,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 class UserRegisterView(APIView):
+    @csrf_exempt
     def post(self, request):
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
