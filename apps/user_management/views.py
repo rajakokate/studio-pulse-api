@@ -1,17 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.http import HttpResponseRedirect
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import viewsets
-#from streamlit import status
 from django.contrib.auth import login, logout
-from django.contrib.auth.hashers import check_password
 from rest_framework import status, permissions
 from django.middleware.csrf import get_token
 from .models import Department, User
-# from django.contrib.auth import get_user_model
-# User = get_user_model()
 from .serializers import (
     DepartmentSerializer,
     UserSerializer,
@@ -104,7 +98,6 @@ class CurrentUserView(APIView):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
 
-from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
@@ -112,18 +105,28 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth.models import Group, Permission
 from rest_framework.permissions import IsAuthenticated
+class PublicReadOnly(permissions.BasePermission):
+    """
+    Custom permission to allow unrestricted GET requests.
+    """
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:  # GET, HEAD, OPTIONS
+            return True
+        return request.user and request.user.is_authenticated
 
 
 class GroupViewSet(ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    permission_classes = [IsAuthenticated]  # Restrict access as needed
+    permission_classes = [PublicReadOnly]  # Allow unrestricted GET
+    #permission_classes = [IsAuthenticated]  # Restrict access as needed
 
 # Permission ViewSet
 class PermissionViewSet(ModelViewSet):
     queryset = Permission.objects.all()
     serializer_class = PermissionSerializer
-    permission_classes = [IsAuthenticated]  # Restrict access as needed
+    permission_classes = [PublicReadOnly]
+    #permission_classes = [IsAuthenticated]  # Restrict access as needed
 
 
 class LoginView(APIView):
