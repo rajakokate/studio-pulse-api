@@ -6,6 +6,7 @@ from django.contrib.auth import login, logout
 from rest_framework import status, permissions
 from django.middleware.csrf import get_token
 from .models import Department, User
+from django.views.decorators.csrf import csrf_exempt
 from .serializers import (
     DepartmentSerializer,
     UserSerializer,
@@ -13,14 +14,19 @@ from .serializers import (
     PermissionSerializer,
     UserRegisterSerializer,
 )
-from django.views.decorators.csrf import csrf_exempt
-# Create your views here.
-def index(request):
-    return HttpResponse("Hello world. You're at the poll index.")
 
-    
+class PublicReadOnly(permissions.BasePermission):
+    """
+    Custom permission to allow unrestricted GET requests.
+    """
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:  # GET, HEAD, OPTIONS
+            return True
+        return request.user and request.user.is_authenticated
+
 class DepartmentViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
+    #permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [PublicReadOnly]
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
 
@@ -105,15 +111,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth.models import Group, Permission
 from rest_framework.permissions import IsAuthenticated
-class PublicReadOnly(permissions.BasePermission):
-    """
-    Custom permission to allow unrestricted GET requests.
-    """
-    def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:  # GET, HEAD, OPTIONS
-            return True
-        return request.user and request.user.is_authenticated
-
 
 class GroupViewSet(ModelViewSet):
     queryset = Group.objects.all()
