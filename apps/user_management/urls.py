@@ -16,7 +16,6 @@ userRoutes.register(r'groups', GroupViewSet)
 userRoutes.register(r'permissions', PermissionViewSet)
 
 urlpatterns = [
-    path("",views.index, name="index"),
     path('', include(router.urls)),
     path('create-department/', create_department_view, name='create_department'),
     path('create-user/', create_user_view, name='create_user'),
