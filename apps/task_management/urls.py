@@ -7,10 +7,10 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 router = DefaultRouter()
 router.register(r'projects', ProjectViewSet)
-router.register(r'comments', ProjectCommentViewSet)
+router.register(r'projectComments', ProjectCommentViewSet)
 router.register(r'shots', ShotViewSet)
 router.register(r'shotAssign', ShotAssociationViewSet)
-router.register(r'shots', CommentViewSet)
+router.register(r'shotComments', CommentViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
