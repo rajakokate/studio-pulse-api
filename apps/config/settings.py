@@ -21,6 +21,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://infiniteloop:8000',
 ]
 SECURITY_ENABLED = False  # Set to True to enable all authentication and permission checks (in production)
+SESSION_SAVE_EVERY_REQUEST = True
 
 SECRET_KEY = config('SECRET_KEY')
 # DEBUG = config('DEBUG', default=False, cast=bool)
