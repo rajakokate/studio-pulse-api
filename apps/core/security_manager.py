@@ -1,9 +1,7 @@
 from django.conf import settings
 from rest_framework import permissions
 class IsAuthenticated(permissions.BasePermission):
-    print("====>  {}".format(settings.SECURITY_ENABLED))
     def has_permission(self, request, view):
-        print("====>  {}".format(settings.SECURITY_ENABLED))
         if not settings.SECURITY_ENABLED:
             return True  # bypass all checks
         return bool(request.user and request.user.is_authenticated)
