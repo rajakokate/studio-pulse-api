@@ -7,6 +7,7 @@ from rest_framework import status, permissions
 from django.middleware.csrf import get_token
 from .models import Department, User
 from django.views.decorators.csrf import csrf_exempt
+from apps.core.security_manager import IsAuthenticated, PublicReadOnly
 from .serializers import (
     DepartmentSerializer,
     UserSerializer,
@@ -15,15 +16,6 @@ from .serializers import (
     UserRegisterSerializer,
 )
 
-class PublicReadOnly(permissions.BasePermission):
-    """
-    Custom permission to allow unrestricted GET requests.
-    """
-    def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:  # GET, HEAD, OPTIONS
-            return True
-        return request.user and request.user.is_authenticated
-
 class DepartmentViewSet(viewsets.ModelViewSet):
     #permission_classes = [permissions.IsAuthenticated]
     permission_classes = [PublicReadOnly]
@@ -31,7 +23,7 @@ class DepartmentViewSet(viewsets.ModelViewSet):
     serializer_class = DepartmentSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -98,7 +90,7 @@ class SessionLoginView(APIView):
 
 # ------------------ Get Current Logged-In User ------------------
 class CurrentUserView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         serializer = UserSerializer(request.user)
@@ -145,7 +137,7 @@ class LoginView(APIView):
         return Response({"error": "Invalid credentials"}, status=HTTP_400_BAD_REQUEST)
 # ------------------ Logout ------------------
 class LogoutView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         logout(request)

@@ -20,7 +20,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',
     'http://infiniteloop:8000',
 ]
-
+SECURITY_ENABLED = False  # Set to True to enable all authentication and permission checks (in production)
 
 SECRET_KEY = config('SECRET_KEY')
 # DEBUG = config('DEBUG', default=False, cast=bool)
@@ -70,7 +70,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication'
-
     ],
 
 

@@ -19,7 +19,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://infiniteloop:8000',
 ]
 
-
+SECURITY_ENABLED = False  # Set to Trueto ena ble all authentication and permission checks (in production)
 SECRET_KEY = config('SECRET_KEY')
 # DEBUG = config('DEBUG', default=False, cast=bool)
 # ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='').split(',')
