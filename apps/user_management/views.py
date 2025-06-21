@@ -42,7 +42,7 @@ def create_department_view(request):
     if request.method == "POST":
         deptId = request.POST.get('deptId')
         deptName = request.POST.get('deptName')
-        
+
         # Save to DB
         Department.objects.create(deptId=deptId, deptName=deptName)
 
@@ -58,10 +58,10 @@ def create_user_view(request):
         userId = request.POST.get('userId')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
-        
+
         # Save to DB
         Department.objects.create(userName=userName, userId=userId, contact=contact, dept=dept,email=email)
-        
+
 
         return render(request, 'create_user.html', {'success': True})
 
@@ -87,6 +87,14 @@ class SessionLoginView(APIView):
 
         return Response({"detail": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
+
+class SessionLogoutView(APIView):
+    permission_classes = [IsAuthenticated]  # or [permissions.AllowAny] if SECURITY_ENABLED is False
+    def post(self, request):
+        logout(request)  # Clears the session
+        response = Response({"message": "Logout successful."}, status=status.HTTP_200_OK)
+        response.delete_cookie("csrftoken")  # Optional: removes CSRF cookie
+        return response
 
 # ------------------ Get Current Logged-In User ------------------
 class CurrentUserView(APIView):
