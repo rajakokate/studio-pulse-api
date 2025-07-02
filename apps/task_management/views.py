@@ -3,6 +3,7 @@ from rest_framework import viewsets
 from rest_framework import  permissions
 from .models import Project, ProjectComment, Shot, ShotAssociation, Comment
 from apps.core.security_manager import IsAuthenticated, PublicReadOnly
+from django.db.models import Count, Case, When, IntegerField, F, FloatField, ExpressionWrapper, Value
 from .serializers import (
     ProjectSerializer,
     ProjectCommentSerializer,
@@ -18,7 +19,24 @@ def index(request):
 
 class ProjectViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
-    queryset = Project.objects.all()
+    queryset = Project.objects.annotate(
+        total_shots=Count('shots'),
+        approved_shots=Count(
+            Case(
+                When(shots__Status='APPROVED', then=1),
+                output_field=IntegerField()
+            )
+        )
+    ).annotate(
+        completion_percentage=Case(
+            When(total_shots=0, then=Value(0.0)),
+            default=ExpressionWrapper(
+                100.0 * F('approved_shots') / F('total_shots'),
+                output_field=FloatField()
+            ),
+            output_field=FloatField()
+        )
+    )
     serializer_class = ProjectSerializer
 
 class ProjectCommentViewSet(viewsets.ModelViewSet):

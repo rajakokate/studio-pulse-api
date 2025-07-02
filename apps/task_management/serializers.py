@@ -5,6 +5,7 @@ from django.contrib.auth.hashers import make_password
 # from django.contrib.auth import get_user_model
 # User = get_user_model()
 class ProjectSerializer(serializers.ModelSerializer):
+    completion_percentage = serializers.FloatField(read_only=True)
     class Meta:
         model = Project
         fields = '__all__'

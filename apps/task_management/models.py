@@ -4,7 +4,7 @@ from django.conf import settings
 
 # ------------------ Client (Assumed based on FK) ------------------
 class Client(models.Model):
-    ClientID = models.CharField(primary_key=True, max_length=100)
+    clientID = models.CharField(primary_key=True, max_length=100)
     name = models.TextField()
 
     def __str__(self):
@@ -15,19 +15,20 @@ class Client(models.Model):
 class Project(models.Model):
     STATUS_CHOICES = [
         ('TODO', 'TODO'),
-        ('In Progress', 'In Progress'),
+        ('IN PROGRESS', 'IN PROGRESS'),
         ('IN REVIEW', 'IN REVIEW'),
         ('APPROVED', 'APPROVED'),
         ('REJECTED', 'REJECTED'),
     ]
 
-    ProjectID = models.CharField(primary_key=True, max_length=100)
-    ProjectName = models.TextField()
-    Status = models.CharField(max_length=20, choices=STATUS_CHOICES)
-    DueDate = models.DateTimeField(blank=True, null=True)
-    StartDate = models.DateTimeField(blank=True, null=True)
-    ClientID = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True)
-
+    projectID = models.AutoField(primary_key=True)
+    projectName = models.TextField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="TODO")
+    dueDate = models.DateTimeField(blank=True, null=True)
+    startDate = models.DateTimeField(blank=True, null=True)
+    clientID = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True)
+    dept =  models.ForeignKey(Department, on_delete=models.CASCADE, null=True)
+    description = models.TextField(null=True)
     def __str__(self):
         return self.ProjectName
 
@@ -47,14 +48,14 @@ class ProjectComment(models.Model):
 class Shot(models.Model):
     STATUS_CHOICES = [
         ('TODO', 'TODO'),
-        ('In Progress', 'In Progress'),
+        ('IN PROGRESS', 'IN PROGRESS'),
         ('IN REVIEW', 'IN REVIEW'),
         ('APPROVED', 'APPROVED'),
         ('REJECTED', 'REJECTED'),
     ]
 
     shotId = models.IntegerField()
-    ProjectId = models.ForeignKey(Project, on_delete=models.CASCADE)
+    ProjectId = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='shots')
     Status = models.CharField(max_length=20, choices=STATUS_CHOICES)
     reel = models.TextField(blank=True, null=True)
     filepath = models.TextField(blank=True, null=True)
@@ -72,14 +73,23 @@ class ShotAssociation(models.Model):
     id = models.AutoField(primary_key=True)  # Add this line
     version = models.FloatField(default=1.0)
     shot = models.ForeignKey(Shot, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    dept = models.ForeignKey(Department, on_delete=models.CASCADE)
-    assignedFrom = models.TextField(null=True, blank=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='shot_assigned_to'
+    )
+    assigned_from = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='shot_assigned_from'
+    )
     assignedDate = models.TextField(null=True, blank=True)
     dueDate = models.TextField(null=True, blank=True)
 
     class Meta:
-        unique_together = ('version', 'shot', 'user', 'dept')
+        unique_together = ('version', 'shot', 'user')
 
 
 # # ------------------ Comment ------------------
