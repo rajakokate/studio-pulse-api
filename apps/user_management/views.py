@@ -25,7 +25,7 @@ class DepartmentViewSet(viewsets.ModelViewSet):
     serializer_class = DepartmentSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]dfaf
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
