@@ -58,3 +58,41 @@ class CommentViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+
+from apps.task_management.models import ShotAssociation
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.db.models import Max, Q
+
+class ArtistShotStatsAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user_id = request.user.id  # You can adjust to use query params if needed
+        stats = get_artist_latest_shot_stats(user_id)
+        return Response(stats)
+
+def get_artist_latest_shot_stats(user_id):
+    # Find latest version of each shot assigned to this user
+    latest_versions = (
+        ShotAssociation.objects
+        .filter(user__id=user_id)
+        .values('shot_id')
+        .annotate(latest_version=Max('version'))
+    )
+
+    # Build a query to match each shot by latest version assigned
+    filters = Q()
+    for item in latest_versions:
+        filters |= Q(shot_id=item['shot_id'], version=item['latest_version'], user__id=user_id)
+
+    # Retrieve only latest assignments
+    latest_assignments = ShotAssociation.objects.filter(filters)
+
+    stats = {
+        "completed": latest_assignments.filter(shot__Status="APPROVED").count(),
+        "in_progress": latest_assignments.filter(shot__Status="IN PROGRESS").count(),
+        "todo_assigned": latest_assignments.filter(shot__Status="TODO").count(),
+    }
+
+    return stats
