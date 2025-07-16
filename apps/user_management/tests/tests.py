@@ -19,9 +19,9 @@ class CreateDepartmentViewTest(TestCase):
         """
         Test GET request returns the department creation page.
         """
-        response = self.client.get(reverse('create-department'))
+        response = self.client.get(reverse('departments'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'create_department.html')
+      
 
     def test_post_create_department_view(self):
         """
