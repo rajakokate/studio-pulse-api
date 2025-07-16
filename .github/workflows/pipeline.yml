@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+    name: build # name to trigger in github branch ruleset
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
