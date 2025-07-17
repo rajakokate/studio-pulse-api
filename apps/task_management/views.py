@@ -68,7 +68,7 @@ class ArtistShotStatsAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        user_id = request.user.id  # You can adjust to use query params if needed
+        user_id = request.user.email  # You can adjust to use query params if needed
         stats = get_artist_latest_shot_stats(user_id)
         return Response(stats)
 
@@ -76,7 +76,7 @@ def get_artist_latest_shot_stats(user_id):
     # Find latest version of each shot assigned to this user
     latest_versions = (
         ShotAssociation.objects
-        .filter(user__id=user_id)
+        .filter(user__email=user_id)
         .values('shot_id')
         .annotate(latest_version=Max('version'))
     )
@@ -84,15 +84,20 @@ def get_artist_latest_shot_stats(user_id):
     # Build a query to match each shot by latest version assigned
     filters = Q()
     for item in latest_versions:
-        filters |= Q(shot_id=item['shot_id'], version=item['latest_version'], user__id=user_id)
+        filters |= Q(shot_id=item['shot_id'], version=item['latest_version'], user__email=user_id)
 
     # Retrieve only latest assignments
     latest_assignments = ShotAssociation.objects.filter(filters)
-
+    in_review_shots = (
+        ShotAssociation.objects
+        .filter(assigned_from=user_id).filter(shot__Status="IN REVIEW")
+        .values('shot_id')
+        .annotate(latest_version=Max('version'))
+    ).count()
     stats = {
         "completed": latest_assignments.filter(shot__Status="APPROVED").count(),
         "in_progress": latest_assignments.filter(shot__Status="IN PROGRESS").count(),
         "todo_assigned": latest_assignments.filter(shot__Status="TODO").count(),
+        "in_review": in_review_shots
     }
-
     return stats
