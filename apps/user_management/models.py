@@ -40,4 +40,4 @@ class User(AbstractUser):
         return check_password(raw_password, self.password)
 
     def __str__(self):
-        return self.userName
+        return self.username        

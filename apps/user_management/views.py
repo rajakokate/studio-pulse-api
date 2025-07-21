@@ -16,6 +16,12 @@ from .serializers import (
     UserRegisterSerializer,
 )
 
+from rest_framework.response import Response
+from rest_framework import status
+from django.contrib.auth.models import AnonymousUser
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.decorators import method_decorator
+
 class DepartmentViewSet(viewsets.ModelViewSet):
     #permission_classes = [permissions.IsAuthenticated]
     permission_classes = [PublicReadOnly]
@@ -68,6 +74,7 @@ def create_user_view(request):
     return render(request, 'create_user.html')
 
 # ------------------ Login ------------------
+@method_decorator (ensure_csrf_cookie,name = 'dispatch')
 class SessionLoginView(APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -101,6 +108,11 @@ class CurrentUserView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        print(request.user)
+        print(request.user.is_authenticated)
+        # Check sessionId is valid or not
+        if isinstance(request.user,AnonymousUser):
+            return Response({"detail":"Unauthorized (not logged in)"}, status=status.HTTP_401_UNAUTHORIZED)
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
 

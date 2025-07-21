@@ -62,6 +62,10 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+
 REST_FRAMEWORK = {
     ## temporary disabling the below to use sessionAuthentication
     # 'DEFAULT_AUTHENTICATION_CLASSES': [
