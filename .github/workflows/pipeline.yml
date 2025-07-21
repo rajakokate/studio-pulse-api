@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  buildAndTest:
     name: build # name to trigger in github branch ruleset
     runs-on: ubuntu-latest
     steps:
