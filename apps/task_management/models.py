@@ -109,5 +109,8 @@ class Comment(models.Model):
 #             )
 #         ]
 
+
+#-------------------deadline commentView--------------
+
     def __str__(self):
         return f"Comment {self.commentId} by {self.user}"

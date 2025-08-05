@@ -12,6 +12,11 @@ from .serializers import (
     CommentSerializer,
 )
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from datetime import timedelta
+from django.utils import timezone
+
 # Create your views here.
 def index(request):
     return HttpResponse("Hello world. You're at the poll index.")
@@ -44,6 +49,10 @@ class ProjectCommentViewSet(viewsets.ModelViewSet):
     queryset = ProjectComment.objects.all()
     serializer_class = ProjectCommentSerializer
 
+    # update user based on sessionid
+    def perform_create(self, serializer):
+        serializer.save(user= self.request.user)
+
 class ShotViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Shot.objects.all()
@@ -58,6 +67,26 @@ class CommentViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+
+
+class NearDeadlineCommentsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        today = timezone.now()
+        today_start = today.replace(hour=0, minute=0, second=0, microsecond=0)
+        upcoming = today_start + timedelta(days=3)
+        print('today time is :',today_start)
+        print('Upcoming 3 day mark:', upcoming)
+
+        near_deadline_projects = Project.objects.filter(
+           dueDate__lte= upcoming,
+           dueDate__gte = today_start
+        )
+
+        comments = ProjectComment.objects.filter(project__in= near_deadline_projects)
+        serializer = ProjectCommentSerializer (comments, many=True)
+        return Response(serializer.data)
 
 from apps.task_management.models import ShotAssociation
 from rest_framework.views import APIView
